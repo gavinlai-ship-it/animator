@@ -81,7 +81,7 @@ fn initial_library() -> #(List(#(String, String)), String){
   case data.load() {
     Ok(#([#(first, _), ..] as library, saved)) ->
       case list.key_find(library, saved){
-        Ok(_) -> #(library, first)
+        Ok(_) -> #(library, saved)
         Error(Nil) -> #(library, first)
       } 
       _ -> #(examples.all, first_example)
@@ -139,7 +139,7 @@ pub fn update(model: Model, msg: Msg) -> #(Model, Effect(Msg)) {
     SetCode(text) -> {
       let library = set_source(model.library, model.current, text)
       let save = effect.from(fn(_dispatch) {data.save(library, model.current)})
-      case run_source(10, text) {
+      case run_source(model.shape_slider, text) {
         // Parsed and evaluated: show the result.
         Ok(paths) -> #(
           Model(..model, library: library, output: ""),
@@ -148,7 +148,7 @@ pub fn update(model: Model, msg: Msg) -> #(Model, Effect(Msg)) {
         // Broken (parse or evaluation): show the error.
         Error(msg) -> #(
           Model(..model, library: library, output: msg),
-          effect.none(),
+          effect.batch([save, draw([])]),
         )
       }
   }
@@ -233,7 +233,7 @@ fn view_anim(model: Model) -> Element(Msg) {
     ]),
     html.input([
       attr.type_("range"),
-      attr.min("0"),
+      attr.min("-20"),
       attr.max("20"),
       attr.value(float.to_string(model.speed *. 10.0)),
       attr.attribute("data-test-id", "speed-slider"),
