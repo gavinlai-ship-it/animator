@@ -29,7 +29,7 @@ pub const public_url = "https://gavinlai-ship-it.github.io/animator/"
 pub const include_app_in_gallery = False
 
 /// A link to your video from Problem 14, which anyone with the link can watch.
-pub const video_url = ""
+pub const video_url = "https://drive.google.com/file/d/1s322UfoT0t6hUfQh3vC0rXTvisnpOZJC/view"
 
 /// Set to True if you would like your video included in the course gallery.
 pub const include_video_in_gallery = False

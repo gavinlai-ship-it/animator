@@ -9,7 +9,7 @@ import gleam/int
 import gleam/list
 import gleam/result
 import limits
-import shape.{type Path, type Point, type Shape, Line, Path, Point}
+import shape.{type Path, type Point, type Shape, Circle, ColorLine, Line, Path, Point,}
 
 /// Call the program's draw function on shape_slider, returning its list of
 /// paths or the evaluation error, so the app can show failures.
@@ -52,6 +52,15 @@ fn to_shape(v: Value) -> Result(Shape, EvalError) {
       use a <- result.try(to_point(start))
       use b <- result.try(to_point(end))
       Ok(Line(a, b))
+    }
+    VData("ColorLine", [start, end, VInt(color)]) -> {
+      use a <- result.try(to_point(start))
+      use b <- result.try(to_point(end))
+      Ok(ColorLine(a, b, color))
+    }
+    VData("Circle", [center, VInt(radius), VInt(color)]) -> {
+      use c <- result.try(to_point(center))
+      Ok(Circle(c, int.to_float(radius), color))
     }
     _ -> Error(BadDrawing("a Path's shape must be a recognized shape"))
   }
