@@ -42,7 +42,7 @@ pub fn load() -> Result(#(List(#(String, String)), String), Nil) {
     }
     let saved = {
         use current <- decode.field("current", decode.string)
-        use drawings <- decode.field("drawings", decode.list(drawing))
+        use drawings <- decode.field("drawing", decode.list(drawing))
         decode.success(#(drawings, current))
     }
     json.parse(text, saved) |> result.replace_error(Nil)
